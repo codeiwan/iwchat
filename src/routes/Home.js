@@ -1,9 +1,18 @@
 import { dbService } from "fbase";
-import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
 const Home = () => {
   const [chat, setChat] = useState("");
+
+  const getChats = async () => {
+    const dbChats = await getDocs(collection(dbService, "chats"));
+    dbChats.forEach((document) => console.log(document.data()));
+  };
+
+  useEffect(() => {
+    getChats();
+  }, []);
 
   const onSubmit = async (event) => {
     event.preventDefault();
