@@ -1,10 +1,17 @@
+import { dbService } from "fbase";
 import { useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
 
 const Home = () => {
   const [chat, setChat] = useState("");
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
+    await addDoc(collection(dbService, "chats"), {
+      text: chat,
+      createdAt: Date.now(),
+    });
+    setChat("");
   };
 
   const onChange = (event) => {
