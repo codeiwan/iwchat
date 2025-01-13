@@ -1,21 +1,19 @@
 import { dbService } from "fbase";
 import { useEffect, useState } from "react";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
 
 const Home = ({ userObj }) => {
   const [chat, setChat] = useState("");
   const [chats, setChats] = useState([]);
 
-  const getChats = async () => {
-    const dbChats = await getDocs(collection(dbService, "chats"));
-    dbChats.forEach((document) => {
-      const chatObject = { ...document.data(), id: document.id };
-      setChats((prev) => [chatObject, ...prev])
-    });
-  };
-
   useEffect(() => {
-    getChats();
+    onSnapshot(collection(dbService, "chats"), snapshot => {
+      const newArray = snapshot.docs.map((document) => ({
+        id: document.id,
+        ...document.data(),
+      }));
+      setChats(newArray);
+    });
   }, []);
 
   const onSubmit = async (event) => {
