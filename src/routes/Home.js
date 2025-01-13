@@ -49,7 +49,11 @@ const Home = ({ userObj }) => {
       </form>
       <div>
         {chats.map((chat) => (
-          <Chat key={chat.id} chatObj={chat} />
+          <Chat
+            key={chat.id}
+            chatObj={chat}
+            isOwner={chat.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </>
