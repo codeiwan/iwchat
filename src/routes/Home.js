@@ -2,7 +2,7 @@ import { dbService } from "fbase";
 import { useEffect, useState } from "react";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 
-const Home = () => {
+const Home = ({ userObj }) => {
   const [chat, setChat] = useState("");
   const [chats, setChats] = useState([]);
 
@@ -23,6 +23,7 @@ const Home = () => {
     await addDoc(collection(dbService, "chats"), {
       text: chat,
       createdAt: Date.now(),
+      creatorId: userObj.uid,
     });
     setChat("");
   };
