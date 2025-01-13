@@ -18,8 +18,6 @@ const Home = () => {
     getChats();
   }, []);
 
-  console.log(chats);
-
   const onSubmit = async (event) => {
     event.preventDefault();
     await addDoc(collection(dbService, "chats"), {
@@ -38,16 +36,25 @@ const Home = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <input
-        value={chat}
-        onChange={onChange}
-        type="text"
-        placeholder="What's on your mind?"
-        maxLength={120}
-      />
-      <input type="submit" value="Chat" />
-    </form>
+    <>
+      <form onSubmit={onSubmit}>
+        <input
+          value={chat}
+          onChange={onChange}
+          type="text"
+          placeholder="What's on your mind?"
+          maxLength={120}
+        />
+        <input type="submit" value="Chat" />
+      </form>
+      <div>
+        {chats.map((chat) => (
+          <div key={chat.id}>
+            <h4>{chat.text}</h4>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
