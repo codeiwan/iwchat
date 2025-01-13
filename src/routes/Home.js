@@ -8,9 +8,10 @@ const Home = () => {
 
   const getChats = async () => {
     const dbChats = await getDocs(collection(dbService, "chats"));
-    dbChats.forEach((document) => 
-      setChats((prev) => [document.data(), ...prev])
-    );
+    dbChats.forEach((document) => {
+      const chatObject = { ...document.data(), id: document.id };
+      setChats((prev) => [chatObject, ...prev])
+    });
   };
 
   useEffect(() => {
