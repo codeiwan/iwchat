@@ -4,15 +4,20 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 
 const Home = () => {
   const [chat, setChat] = useState("");
+  const [chats, setChats] = useState([]);
 
   const getChats = async () => {
     const dbChats = await getDocs(collection(dbService, "chats"));
-    dbChats.forEach((document) => console.log(document.data()));
+    dbChats.forEach((document) => 
+      setChats((prev) => [document.data(), ...prev])
+    );
   };
 
   useEffect(() => {
     getChats();
   }, []);
+
+  console.log(chats);
 
   const onSubmit = async (event) => {
     event.preventDefault();
