@@ -1,6 +1,7 @@
 import { dbService } from "fbase";
 import { useEffect, useState } from "react";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import Chat from "components/Chat";
 
 const Home = ({ userObj }) => {
   const [chat, setChat] = useState("");
@@ -48,9 +49,7 @@ const Home = ({ userObj }) => {
       </form>
       <div>
         {chats.map((chat) => (
-          <div key={chat.id}>
-            <h4>{chat.text}</h4>
-          </div>
+          <Chat key={chat.id} chatObj={chat} />
         ))}
       </div>
     </>
