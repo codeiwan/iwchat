@@ -1,5 +1,6 @@
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import { useState } from "react";
 
 const Chat = ({ chatObj, isOwner }) => {
@@ -8,11 +9,10 @@ const Chat = ({ chatObj, isOwner }) => {
 
   const onDeleteClick = async () => {
     const ok = window.confirm("삭제하시겠습니까?");
-    console.log(ok);
     if (ok) {
-      console.log(chatObj.id);
-      const data = await deleteDoc(doc(dbService, "chats", chatObj.id));
-      console.log(data);
+      await deleteDoc(doc(dbService, "chats", chatObj.id));
+      if (chatObj.attachmentUrl !== "")
+        await deleteObject(ref(storageService, chatObj.attachmentUrl));
     }
   };
 
