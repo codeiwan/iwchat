@@ -1,7 +1,9 @@
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import { useEffect, useState } from "react";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import Chat from "components/Chat";
+import { ref, uploadString } from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({ userObj }) => {
   const [chat, setChat] = useState("");
@@ -20,12 +22,15 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await addDoc(collection(dbService, "chats"), {
+    /* await addDoc(collection(dbService, "chats"), {
       text: chat,
       createdAt: Date.now(),
       creatorId: userObj.uid,
     });
-    setChat("");
+    setChat(""); */
+    const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+    const response = await uploadString(attachmentRef, attachment, "data_url");
+    console.log(response);
   };
 
   const onChange = (event) => {
