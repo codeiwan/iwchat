@@ -2,7 +2,7 @@ import { dbService, storageService } from "fbase";
 import { useEffect, useState } from "react";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import Chat from "components/Chat";
-import { ref, uploadString } from "firebase/storage";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({ userObj }) => {
@@ -22,15 +22,20 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    /* await addDoc(collection(dbService, "chats"), {
+    let attachmentUrl = "";
+    if (attachment !== "") {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(attachmentRef, attachment, "data_url");
+      attachmentUrl = await getDownloadURL(response.ref);
+    }
+    await addDoc(collection(dbService, "chats"), {
       text: chat,
       createdAt: Date.now(),
       creatorId: userObj.uid,
+      attachmentUrl,
     });
-    setChat(""); */
-    const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    const response = await uploadString(attachmentRef, attachment, "data_url");
-    console.log(response);
+    setChat("");
+    setAttachment("");
   };
 
   const onChange = (event) => {
