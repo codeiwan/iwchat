@@ -1,5 +1,5 @@
 import { dbService } from "fbase";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
 const Chat = ({ chatObj, isOwner }) => {
@@ -18,12 +18,26 @@ const Chat = ({ chatObj, isOwner }) => {
 
   const toggleEditing = () => setEditing((prev) => !prev);
 
+  const onChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setNewChat(value);
+  };
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    await updateDoc(doc(dbService, "chats", chatObj.id), { text: newChat });
+    setEditing(false);
+  };
+
   return (
     <div>
       {editing ? (
         <>
-          <form>
-            <input value={newChat} required />
+          <form onSubmit={onSubmit}>
+            <input onChange={onChange} value={newChat} required />
+            <input type="submit" value="Update Chat"/>
           </form>
           <button onClick={toggleEditing}>Cancle</button>
         </>
