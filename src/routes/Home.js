@@ -6,6 +6,7 @@ import Chat from "components/Chat";
 const Home = ({ userObj }) => {
   const [chat, setChat] = useState("");
   const [chats, setChats] = useState([]);
+  const [attachment, setAttachment] = useState("");
 
   useEffect(() => {
     onSnapshot(collection(dbService, "chats"), snapshot => {
@@ -42,7 +43,10 @@ const Home = ({ userObj }) => {
     const theFile = files[0];
     const reader = new FileReader();
     reader.onloadend = (finishedEvent) => {
-      console.log(finishedEvent);
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttachment(result);
     };
     reader.readAsDataURL(theFile);
   };
@@ -59,6 +63,7 @@ const Home = ({ userObj }) => {
         />
         <input type="file" accept="image/*" onChange={onFileChange} />
         <input type="submit" value="Chat" />
+        {attachment && <img src={attachment} width="50px" height="50px" />}
       </form>
       <div>
         {chats.map((chat) => (
