@@ -1,6 +1,6 @@
 import { dbService, storageService } from "fbase";
 import { useEffect, useState } from "react";
-import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, orderBy, query } from "firebase/firestore";
 import Chat from "components/Chat";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
@@ -11,13 +11,19 @@ const Home = ({ userObj }) => {
   const [attachment, setAttachment] = useState("");
 
   useEffect(() => {
-    onSnapshot(collection(dbService, "chats"), snapshot => {
-      const newArray = snapshot.docs.map((document) => ({
-        id: document.id,
-        ...document.data(),
-      }));
-      setChats(newArray);
-    });
+    onSnapshot(
+      query(
+        collection(dbService, "chats"),
+        orderBy("createdAt", "desc")
+      ),
+      snapshot => {
+        const newArray = snapshot.docs.map((document) => ({
+          id: document.id,
+          ...document.data(),
+        }));
+        setChats(newArray);
+      }
+    );
   }, []);
 
   const onSubmit = async (event) => {
