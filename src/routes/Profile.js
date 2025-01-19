@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Chat from "components/Chat";
 
-const Profile = ({ userObj }) => {
+const Profile = ({ userObj, refreshUser }) => {
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName || "");
@@ -25,7 +25,9 @@ const Profile = ({ userObj }) => {
   const onSubmit = async (event) => {
     event.preventDefault();
     if (userObj.displayName !== newDisplayName) {
-      await updateProfile(userObj, { displayName: newDisplayName });
+      const user = authService.currentUser;
+      await updateProfile(user, { displayName: newDisplayName });
+      refreshUser();
     }
   };
 
