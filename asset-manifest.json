@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/iwchat/static/js/main.b9cb063a.js",
+    "index.html": "/iwchat/index.html",
+    "main.b9cb063a.js.map": "/iwchat/static/js/main.b9cb063a.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.b9cb063a.js"
+  ]
+}
