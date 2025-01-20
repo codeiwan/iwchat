@@ -4,7 +4,6 @@ import { authService } from "fbase";
 
 function App() {
   const [init, setInit] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
   const [userObj, setUserObj] = useState(null);
 
   useEffect(() => {
@@ -15,7 +14,7 @@ function App() {
           displayName: user.displayName,
         });
       } else {
-        setIsLoggedIn(false);
+        setUserObj(false);
       }
       setInit(true);
     });
