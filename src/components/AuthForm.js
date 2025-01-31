@@ -22,13 +22,12 @@ const AuthForm = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      let data;
       if (newAccount) {
-        // create newAccount
-        data = await createUserWithEmailAndPassword(authService, email, password);
-      } else {
         // log in
-        data = await signInWithEmailAndPassword(authService, email, password);
+        await signInWithEmailAndPassword(authService, email, password);
+      } else {
+        // create newAccount
+        await createUserWithEmailAndPassword(authService, email, password);
       }
     } catch (error) {
       setError(error.message);
@@ -39,7 +38,7 @@ const AuthForm = () => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="container">
         <input
           name="email"
           type="email"
@@ -47,6 +46,7 @@ const AuthForm = () => {
           required
           value={email}
           onChange={onChange}
+          className="authInput"
         />
         <input
           name="password"
@@ -55,12 +55,17 @@ const AuthForm = () => {
           required
           value={password}
           onChange={onChange}
+          className="authInput"
         />
-        <input type="submit" value={newAccount ? "Create Account" : "Log in"} />
-        {error}
+        <input
+          type="submit"
+          value={newAccount ? "Log in" : "Create Account"}
+          className="authInput authSubmit"
+        />
+        {error && <span className="authError">{error}</span>}
       </form>
-      <span onClick={toggleAccount}>
-        {newAccount ? "Sign In" : "Create Account"}
+      <span onClick={toggleAccount} className="authSwitch">
+        {newAccount ? "Create Account" : "Sign In"}
       </span>
     </>
   );

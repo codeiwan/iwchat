@@ -24,9 +24,9 @@ const Home = ({ userObj }) => {
   }, []);
 
   return (
-    <>
+    <div className="container">
       <ChatFactory userObj={userObj} />
-      <div>
+      <div style={{ marginTop: 30 }}>
         {chats.map((chat) => (
           <Chat
             key={chat.id}
@@ -35,7 +35,7 @@ const Home = ({ userObj }) => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
